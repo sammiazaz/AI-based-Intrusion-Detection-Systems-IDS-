@@ -1,0 +1,13 @@
+venv/
+venv_new/
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+.idea/
+.vscode/
+node_modules/
+model.joblib
+nids_model.pkl
+traffic_data.csv

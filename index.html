@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AstraGuard AI — Network Intrusion Detection System</title>
+  <meta name="description"
+    content="AI-powered real-time network intrusion detection and threat monitoring dashboard." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=Share+Tech+Mono&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">
+        <div class="logo-shield">
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 3L5 12V24C5 35.5 13.4 46.3 24 49C34.6 46.3 43 35.5 43 24V12L24 3Z" fill="rgba(0,212,255,0.1)"
+              stroke="#00d4ff" stroke-width="1.5" />
+            <path d="M24 10L12 16V24C12 31.5 17.4 38.6 24 41C30.6 38.6 36 31.5 36 24V16L24 10Z"
+              fill="rgba(0,212,255,0.07)" stroke="rgba(0,212,255,0.5)" stroke-width="1" />
+            <circle cx="24" cy="24" r="5" fill="#00d4ff" opacity="0.9" />
+            <circle cx="24" cy="24" r="3" fill="#00ff88" />
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">AstraGuard AI</span>
+          <span class="logo-sub">Network Intrusion Detection System</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="status-badge" id="systemStatusBadge">
+        <span class="pulse-dot online"></span>
+        <span>SYSTEM ONLINE</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <div class="clock-wrap">
+        <div class="clock-time" id="clockTime">00:00:00</div>
+        <div class="clock-date" id="clockDate">Loading…</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── App Layout ─────────────────────────────────────────────── -->
+  <div class="app-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
+
+        <a href="#" class="nav-item active" data-section="dashboard" id="nav-dashboard">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+          </svg>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="#" class="nav-item" data-section="train" id="nav-train">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+            <path d="M2 17l10 5 10-5"></path>
+            <path d="M2 12l10 5 10-5"></path>
+          </svg>
+          <span>Train Model</span>
+        </a>
+
+        <a href="#" class="nav-item" data-section="simulation" id="nav-simulation">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <span>Live Simulation</span>
+        </a>
+
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-model-card">
+          <div class="smc-label">Model Status</div>
+          <div class="smc-value" id="sbModelStatus">UNTRAINED</div>
+          <div class="smc-acc" id="sbAccuracy">Train to begin detection</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── Main ───────────────────────────────────────────────────── -->
+    <main class="main-content">
+
+      <!-- ══ DASHBOARD ══════════════════════════════════════════════ -->
+      <section class="content-section active" id="section-dashboard">
+        <div class="section-header">
+          <h1 class="section-title">Security Dashboard</h1>
+          <p class="section-sub">Real-time network security monitoring & threat intelligence</p>
+        </div>
+
+        <!-- Metrics row -->
+        <div class="metrics-grid">
+          <div class="metric-card" id="mc-status">
+            <div class="mc-left">
+              <div class="mc-icon color-success">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+              </div>
+            </div>
+            <div class="mc-body">
+              <div class="mc-label">System Status</div>
+              <div class="mc-value color-success">ACTIVE</div>
+            </div>
+            <div class="mc-glow glow-success"></div>
+          </div>
+
+          <div class="metric-card" id="mc-accuracy">
+            <div class="mc-left">
+              <div class="mc-icon color-primary">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+              </div>
+            </div>
+            <div class="mc-body">
+              <div class="mc-label">Model Accuracy</div>
+              <div class="mc-value color-primary" id="dashAccuracy">— %</div>
+            </div>
+            <div class="mc-glow glow-primary"></div>
+          </div>
+
+          <div class="metric-card" id="mc-threat">
+            <div class="mc-left">
+              <div class="mc-icon color-warning">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                  </path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+              </div>
+            </div>
+            <div class="mc-body">
+              <div class="mc-label">Threat Level</div>
+              <div class="mc-value color-warning" id="dashThreat">LOW</div>
+            </div>
+            <div class="mc-glow glow-warning"></div>
+          </div>
+
+          <div class="metric-card" id="mc-detected">
+            <div class="mc-left">
+              <div class="mc-icon color-danger">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="mc-body">
+              <div class="mc-label">Threats Detected</div>
+              <div class="mc-value color-danger" id="dashDetected">0</div>
+            </div>
+            <div class="mc-glow glow-danger"></div>
+          </div>
+        </div>
+
+        <!-- Charts + Alerts row -->
+        <div class="bottom-row">
+          <div class="card chart-card">
+            <div class="card-header">
+              <h3 class="card-title">Traffic Distribution</h3>
+              <span class="badge badge-live" id="chartBadge">IDLE</span>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="trafficChart"></canvas>
+              <div class="chart-placeholder" id="chartPlaceholder">
+                <div class="placeholder-icon">📊</div>
+                <p>Train the model to visualize<br />traffic distribution</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card alerts-card">
+            <div class="card-header">
+              <h3 class="card-title">Recent Alerts</h3>
+              <span class="badge" id="alertsBadge">IDLE</span>
+            </div>
+            <div class="alerts-list" id="alertsList">
+              <div class="empty-hint">
+                <p>Run a live simulation to<br />populate this feed</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ TRAIN MODEL ════════════════════════════════════════════ -->
+      <section class="content-section" id="section-train">
+        <div class="section-header">
+          <h1 class="section-title">Model Training</h1>
+          <p class="section-sub">Train the Random Forest classifier on synthetic CIC-IDS2017 network data</p>
+        </div>
+
+        <div class="train-layout">
+          <div class="train-sidebar">
+            <!-- Options card -->
+            <div class="card train-options-card mb-4">
+              <div class="card-header">
+                <h3 class="card-title">Data Source Selection</h3>
+              </div>
+              <div class="p-4">
+                <div class="source-selector">
+                  <label class="radio-container">
+                    <input type="radio" name="dataSource" value="simulated" checked onchange="toggleDataSource()">
+                    <span class="radio-mark"></span>
+                    Simulated Dataset
+                  </label>
+                  <label class="radio-container">
+                    <input type="radio" name="dataSource" value="upload" onchange="toggleDataSource()">
+                    <span class="radio-mark"></span>
+                    Upload CSV (CIC-IDS2017 Format)
+                  </label>
+                </div>
+
+                <div id="simulated-options">
+                  <button class="gen-btn" id="genBtn" onclick="generateSimulatedData()">
+                    Generate Simulated Dataset
+                  </button>
+                  <div id="gen-status" class="mt-2 text-xs color-success" style="display:none">✓ Dataset generated (5000
+                    samples)</div>
+                </div>
+
+                <div id="upload-options" style="display:none">
+                  <input type="file" id="csvUpload" class="file-input" accept=".csv">
+                  <p class="mt-2 text-xs color-muted">Select a CSV file for training.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Config card -->
+            <div class="card config-card">
+              <div class="card-header">
+                <h3 class="card-title">Training Configuration</h3>
+              </div>
+              <div class="config-list">
+                <div class="config-row"><span class="cfg-k">Algorithm</span><span class="cfg-v color-primary">Random
+                    Forest Classifier</span></div>
+                <div class="config-row"><span class="cfg-k">Estimators</span><span class="cfg-v">100 Decision
+                    Trees</span></div>
+                <div class="config-row"><span class="cfg-k">Max Depth</span><span class="cfg-v">10 Layers</span></div>
+                <div class="config-row"><span class="cfg-k">Dataset Size</span><span class="cfg-v">5,000 Samples</span>
+                </div>
+                <div class="config-row"><span class="cfg-k">Train / Test</span><span class="cfg-v">80% / 20%</span>
+                </div>
+                <div class="config-row"><span class="cfg-k">Features</span><span class="cfg-v">Duration, Src_Bytes,
+                    Dst_Bytes, Conn_Count</span></div>
+                <div class="config-row"><span class="cfg-k">Classes</span><span class="cfg-v">Normal · DDoS · Brute
+                    Force · Malware</span></div>
+              </div>
+
+              <div class="train-progress" id="trainProgress" style="display:none">
+                <div class="prog-step" id="ps1"><span class="ps-dot"></span><span>Generating dataset…</span></div>
+                <div class="prog-step" id="ps2"><span class="ps-dot"></span><span>Preprocessing features…</span></div>
+                <div class="prog-step" id="ps3"><span class="ps-dot"></span><span>Training Random Forest…</span></div>
+                <div class="prog-step" id="ps4"><span class="ps-dot"></span><span>Evaluating model…</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Results area -->
+          <div class="train-results" id="trainResults" style="display:none">
+            <div class="card acc-card">
+              <div class="acc-ring-wrap">
+                <svg class="acc-ring" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(0,212,255,0.08)" stroke-width="10" />
+                  <circle cx="60" cy="60" r="50" fill="none" stroke="#00d4ff" stroke-width="10"
+                    stroke-dasharray="314.16" stroke-dashoffset="314.16" stroke-linecap="round"
+                    transform="rotate(-90 60 60)" id="accCircle" />
+                </svg>
+                <div class="acc-text">
+                  <div class="acc-num" id="accNum">0%</div>
+                  <div class="acc-lbl">Accuracy</div>
+                </div>
+              </div>
+              <div class="acc-footer">
+                <span class="acc-badge" id="accBadge">—</span>
+                <span class="acc-samples" id="accSamples"></span>
+              </div>
+            </div>
+
+            <div class="card perf-card">
+              <div class="card-header">
+                <h3 class="card-title">Performance Metrics</h3>
+              </div>
+              <table class="perf-table">
+                <thead>
+                  <tr>
+                    <th>Class</th>
+                    <th>Precision</th>
+                    <th>Recall</th>
+                    <th>F1-Score</th>
+                    <th>Support</th>
+                  </tr>
+                </thead>
+                <tbody id="perfBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ LIVE SIMULATION ════════════════════════════════════════ -->
+      <section class="content-section" id="section-simulation">
+        <div class="section-header">
+          <h1 class="section-title">Live Simulation</h1>
+          <p class="section-sub">Real-time AI-powered network packet classification & threat alerting</p>
+        </div>
+
+        <div class="sim-layout">
+          <!-- Alert display -->
+          <div class="alert-display" id="alertDisplay">
+            <div class="alert-inner secure" id="alertInner">
+              <div class="alert-icon" id="alertIcon">🛡️</div>
+              <div class="alert-label" id="alertLabel">SECURE</div>
+              <div class="alert-desc" id="alertDesc">Network traffic is normal — no threats detected</div>
+            </div>
+          </div>
+
+          <!-- Stat pills -->
+          <div class="sim-stats">
+            <div class="stat-pill"><span class="sp-label">Normal</span><span class="sp-val color-success"
+                id="sNormal">0</span></div>
+            <div class="stat-pill"><span class="sp-label">DDoS</span><span class="sp-val color-danger"
+                id="sDdos">0</span></div>
+            <div class="stat-pill"><span class="sp-label">Brute Force</span><span class="sp-val color-warning"
+                id="sBrute">0</span></div>
+            <div class="stat-pill"><span class="sp-label">Malware</span><span class="sp-val color-purple"
+                id="sMalware">0</span></div>
+          </div>
+
+          <!-- Controls -->
+          <div class="sim-controls">
+            <button class="sim-btn" id="simBtn" onclick="toggleSimulation()">▶ Start Simulation</button>
+          </div>
+
+          <!-- Log table -->
+          <div class="card log-card">
+            <div class="card-header">
+              <h3 class="card-title">Packet Log</h3>
+              <span class="badge" id="packetCountBadge">0 packets</span>
+            </div>
+            <div class="table-scroll">
+              <table class="log-table" id="logTable" style="display:none">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Timestamp</th>
+                    <th>Duration (s)</th>
+                    <th>Src Bytes</th>
+                    <th>Dst Bytes</th>
+                    <th>Conn Count</th>
+                    <th>Prediction</th>
+                  </tr>
+                </thead>
+                <tbody id="logBody"></tbody>
+              </table>
+              <div class="empty-hint" id="logEmpty">
+                <p>Start simulation to see live packet data</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+
+</html>
